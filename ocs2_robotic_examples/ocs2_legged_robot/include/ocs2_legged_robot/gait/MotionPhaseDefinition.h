@@ -115,16 +115,75 @@ enum ModeNumber {  // {LF, RF, LM, RM, LH, RH}
 /******************************************************************************************************/
 /******************************************************************************************************/
 inline contact_flag_t modeNumber2StanceLeg(const size_t& modeNumber) {
-  contact_flag_t stanceLegs;  // {LF, RF, LM, RM, LH, RH}
-  // stanceLegs.resize(6);
-
-  // Extract bits for each leg: bit0=RH, bit1=LH, bit2=RM, bit3=LM, bit4=RF, bit5=LF
-  stanceLegs[0] = (modeNumber & 32) != 0;  // LF
-  stanceLegs[1] = (modeNumber & 16) != 0;  // RF
-  stanceLegs[2] = (modeNumber & 8) != 0;   // LM
-  stanceLegs[3] = (modeNumber & 4) != 0;   // RM
-  stanceLegs[4] = (modeNumber & 2) != 0;   // LH
-  stanceLegs[5] = (modeNumber & 1) != 0;   // RH
+  // Explicit switch mapping for all 6-leg contact modes.
+  // Order inside contact_flag_t = {LF, RF, LM, RM, LH, RH}
+  contact_flag_t stanceLegs;
+  switch (modeNumber) {
+    case 0: stanceLegs = contact_flag_t{false,false,false,false,false,false}; break;              // 0
+    case 1: stanceLegs = contact_flag_t{false,false,false,false,false,true}; break;               // 1
+    case 2: stanceLegs = contact_flag_t{false,false,false,false,true,false}; break;               // 2
+    case 3: stanceLegs = contact_flag_t{false,false,false,false,true,true}; break;             // 3
+    case 4: stanceLegs = contact_flag_t{false,false,false,true,false,false}; break;               // 4
+    case 5: stanceLegs = contact_flag_t{false,false,false,true,false,true}; break;             // 5
+    case 6: stanceLegs = contact_flag_t{false,false,false,true,true,false}; break;             // 6
+    case 7: stanceLegs = contact_flag_t{false,false,false,true,true,true}; break;           // 7
+    case 8: stanceLegs = contact_flag_t{false,false,true,false,false,false}; break;               // 8
+    case 9: stanceLegs = contact_flag_t{false,false,true,false,false,true}; break;             // 9
+    case 10: stanceLegs = contact_flag_t{false,false,true,false,true,false}; break;             // 10
+    case 11: stanceLegs = contact_flag_t{false,false,true,false,true,true}; break;           // 11
+    case 12: stanceLegs = contact_flag_t{false,false,true,true,false,false}; break;             // 12
+    case 13: stanceLegs = contact_flag_t{false,false,true,true,false,true}; break;           // 13
+    case 14: stanceLegs = contact_flag_t{false,false,true,true,true,false}; break;           // 14
+    case 15: stanceLegs = contact_flag_t{false,false,true,true,true,true}; break;         // 15
+    case 16: stanceLegs = contact_flag_t{false,true,false,false,false,false}; break;               // 16
+    case 17: stanceLegs = contact_flag_t{false,true,false,false,false,true}; break;             // 17
+    case 18: stanceLegs = contact_flag_t{false,true,false,false,true,false}; break;             // 18
+    case 19: stanceLegs = contact_flag_t{false,true,false,false,true,true}; break;           // 19
+    case 20: stanceLegs = contact_flag_t{false,true,false,true,false,false}; break;             // 20
+    case 21: stanceLegs = contact_flag_t{false,true,false,true,false,true}; break;           // 21
+    case 22: stanceLegs = contact_flag_t{false,true,false,true,true,false}; break;           // 22
+    case 23: stanceLegs = contact_flag_t{false,true,false,true,true,true}; break;         // 23
+    case 24: stanceLegs = contact_flag_t{false,true,true,false,false,false}; break;             // 24
+    case 25: stanceLegs = contact_flag_t{false,true,true,false,false,true}; break;           // 25
+    case 26: stanceLegs = contact_flag_t{false,true,true,false,true,false}; break;           // 26
+    case 27: stanceLegs = contact_flag_t{false,true,true,false,true,true}; break;         // 27
+    case 28: stanceLegs = contact_flag_t{false,true,true,true,false,false}; break;           // 28
+    case 29: stanceLegs = contact_flag_t{false,true,true,true,false,true}; break;         // 29
+    case 30: stanceLegs = contact_flag_t{false,true,true,true,true,false}; break;         // 30
+    case 31: stanceLegs = contact_flag_t{false,true,true,true,true,true}; break;       // 31
+    case 32: stanceLegs = contact_flag_t{true,false,false,false,false,false}; break;               // 32
+    case 33: stanceLegs = contact_flag_t{true,false,false,false,false,true}; break;             // 33
+    case 34: stanceLegs = contact_flag_t{true,false,false,false,true,false}; break;             // 34
+    case 35: stanceLegs = contact_flag_t{true,false,false,false,true,true}; break;           // 35
+    case 36: stanceLegs = contact_flag_t{true,false,false,true,false,false}; break;             // 36
+    case 37: stanceLegs = contact_flag_t{true,false,false,true,false,true}; break;           // 37
+    case 38: stanceLegs = contact_flag_t{true,false,false,true,true,false}; break;           // 38
+    case 39: stanceLegs = contact_flag_t{true,false,false,true,true,true}; break;         // 39
+    case 40: stanceLegs = contact_flag_t{true,false,true,false,false,false}; break;             // 40
+    case 41: stanceLegs = contact_flag_t{true,false,true,false,false,true}; break;           // 41
+    case 42: stanceLegs = contact_flag_t{true,false,true,false,true,false}; break;           // 42
+    case 43: stanceLegs = contact_flag_t{true,false,true,false,true,true}; break;         // 43
+    case 44: stanceLegs = contact_flag_t{true,false,true,true,false,false}; break;           // 44
+    case 45: stanceLegs = contact_flag_t{true,false,true,true,false,true}; break;         // 45
+    case 46: stanceLegs = contact_flag_t{true,false,true,true,true,false}; break;         // 46
+    case 47: stanceLegs = contact_flag_t{true,false,true,true,true,true}; break;       // 47
+    case 48: stanceLegs = contact_flag_t{true,true,false,false,false,false}; break;             // 48
+    case 49: stanceLegs = contact_flag_t{true,true,false,false,false,true}; break;           // 49
+    case 50: stanceLegs = contact_flag_t{true,true,false,false,true,false}; break;           // 50
+    case 51: stanceLegs = contact_flag_t{true,true,false,false,true,true}; break;         // 51
+    case 52: stanceLegs = contact_flag_t{true,true,false,true,false,false}; break;           // 52
+    case 53: stanceLegs = contact_flag_t{true,true,false,true,false,true}; break;         // 53
+    case 54: stanceLegs = contact_flag_t{true,true,false,true,true,false}; break;         // 54
+    case 55: stanceLegs = contact_flag_t{true,true,false,true,true,true}; break;       // 55
+    case 56: stanceLegs = contact_flag_t{true,true,true,false,false,false}; break;           // 56
+    case 57: stanceLegs = contact_flag_t{true,true,true,false,false,true}; break;         // 57
+    case 58: stanceLegs = contact_flag_t{true,true,true,false,true,false}; break;         // 58
+    case 59: stanceLegs = contact_flag_t{true,true,true,false,true,true}; break;       // 59
+    case 60: stanceLegs = contact_flag_t{true,true,true,true,false,false}; break;         // 60
+    case 61: stanceLegs = contact_flag_t{true,true,true,true,false,true}; break;       // 61
+    case 62: stanceLegs = contact_flag_t{true,true,true,true,true,false}; break;       // 62
+    case 63: stanceLegs = contact_flag_t{true,true,true,true,true,true}; break;                // 63
+  }
 
   return stanceLegs;
 }
