@@ -71,12 +71,14 @@ LeggedRobotVisualizer::LeggedRobotVisualizer(PinocchioInterface pinocchioInterfa
 
 /******************************************************************************************************/
 /******************************************************************************************************/
-/******************************************************************************************************/
+/****************************************************************************************************这些都是为了在 RViz 里画点、线**/
 void LeggedRobotVisualizer::launchVisualizerNode(ros::NodeHandle& nodeHandle) {
   costDesiredBasePositionPublisher_ = nodeHandle.advertise<visualization_msgs::Marker>("/legged_robot/desiredBaseTrajectory", 1);
   costDesiredFeetPositionPublishers_.resize(centroidalModelInfo_.numThreeDofContacts);
   costDesiredFeetPositionPublishers_[0] = nodeHandle.advertise<visualization_msgs::Marker>("/legged_robot/desiredFeetTrajectory/LF", 1);
   costDesiredFeetPositionPublishers_[1] = nodeHandle.advertise<visualization_msgs::Marker>("/legged_robot/desiredFeetTrajectory/RF", 1);
+  costDesiredFeetPositionPublishers_[0] = nodeHandle.advertise<visualization_msgs::Marker>("/legged_robot/desiredFeetTrajectory/LM", 1);
+  costDesiredFeetPositionPublishers_[1] = nodeHandle.advertise<visualization_msgs::Marker>("/legged_robot/desiredFeetTrajectory/RM", 1);
   costDesiredFeetPositionPublishers_[2] = nodeHandle.advertise<visualization_msgs::Marker>("/legged_robot/desiredFeetTrajectory/LH", 1);
   costDesiredFeetPositionPublishers_[3] = nodeHandle.advertise<visualization_msgs::Marker>("/legged_robot/desiredFeetTrajectory/RH", 1);
   stateOptimizedPublisher_ = nodeHandle.advertise<visualization_msgs::MarkerArray>("/legged_robot/optimizedStateTrajectory", 1);
@@ -137,20 +139,22 @@ void LeggedRobotVisualizer::publishObservation(ros::Time timeStamp, const System
 
 /******************************************************************************************************/
 /******************************************************************************************************/
-/******************************************************************************************************/
+/****************************************************************************************************这里的map是关节角度到关节名称的映射**/
 void LeggedRobotVisualizer::publishJointTransforms(ros::Time timeStamp, const vector_t& jointAngles) const {
   if (robotStatePublisherPtr_ != nullptr) {
     std::map<std::string, scalar_t> jointPositions{{"LF_HAA", jointAngles[0]}, {"LF_HFE", jointAngles[1]},  {"LF_KFE", jointAngles[2]},
-                                                   {"LH_HAA", jointAngles[3]}, {"LH_HFE", jointAngles[4]},  {"LH_KFE", jointAngles[5]},
-                                                   {"RF_HAA", jointAngles[6]}, {"RF_HFE", jointAngles[7]},  {"RF_KFE", jointAngles[8]},
-                                                   {"RH_HAA", jointAngles[9]}, {"RH_HFE", jointAngles[10]}, {"RH_KFE", jointAngles[11]}};
+                                                   {"LM_HAA", jointAngles[3]}, {"LM_HFE", jointAngles[4]},  {"LM_KFE", jointAngles[5]},
+                                                   {"LH_HAA", jointAngles[6]}, {"LH_HFE", jointAngles[7]},  {"LH_KFE", jointAngles[8]},
+                                                   {"RF_HAA", jointAngles[9]}, {"RF_HFE", jointAngles[10]}, {"RF_KFE", jointAngles[11]},
+                                                   {"RM_HAA", jointAngles[12]}, {"RM_HFE", jointAngles[13]}, {"RM_KFE", jointAngles[14]},
+                                                   {"RH_HAA", jointAngles[15]}, {"RH_HFE", jointAngles[16]}, {"RH_KFE", jointAngles[17]}};
     robotStatePublisherPtr_->publishTransforms(jointPositions, timeStamp);
   }
 }
 
 /******************************************************************************************************/
 /******************************************************************************************************/
-/******************************************************************************************************/
+/*****************************************************************************************************这里是base，urdf里面第一个连杆需要是base*/
 void LeggedRobotVisualizer::publishBaseTransform(ros::Time timeStamp, const vector_t& basePose) {
   if (robotStatePublisherPtr_ != nullptr) {
     geometry_msgs::TransformStamped baseToWorldTransform;

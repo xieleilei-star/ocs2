@@ -82,7 +82,7 @@ vector_t LeggedRobotMpcnetDefinition::getObservation(scalar_t t, const vector_t&
   /**
    * observation
    */
-  vector_t observation(36);
+  vector_t observation(48);// 六足3*6 + 30=48;四足12+24=36;其中24=3+3+3+3+12，3+3+3+3为：base pos (x,y,z)base vel (vx,vy,vz)Euler angles (yaw, pitch, roll)angular vel (wx, wy, wz)
   observation << generalizedTime, relativeState;
   return observation;
 }
@@ -91,15 +91,17 @@ std::pair<matrix_t, vector_t> LeggedRobotMpcnetDefinition::getActionTransformati
                                                                                    const ModeSchedule& modeSchedule,
                                                                                    const TargetTrajectories& targetTrajectories) {
   const matrix3_t R = getRotationMatrixFromZyxEulerAngles<scalar_t>(x.segment<3>(9));
-  matrix_t actionTransformationMatrix = matrix_t::Identity(24, 24);
+  matrix_t actionTransformationMatrix = matrix_t::Identity(36, 36);
   actionTransformationMatrix.block<3, 3>(0, 0) = R;
   actionTransformationMatrix.block<3, 3>(3, 3) = R;
   actionTransformationMatrix.block<3, 3>(6, 6) = R;
   actionTransformationMatrix.block<3, 3>(9, 9) = R;
+  actionTransformationMatrix.block<3, 3>(12, 12) = R;
+  actionTransformationMatrix.block<3, 3>(15, 15) = R;
   // TODO(areske): check why less robust with weight compensating bias?
   // const auto contactFlags = modeNumber2StanceLeg(modeSchedule.modeAtTime(t));
   // const vector_t actionTransformationVector = weightCompensatingInput(centroidalModelInfo_, contactFlags);
-  return {actionTransformationMatrix, vector_t::Zero(24)};
+  return {actionTransformationMatrix, vector_t::Zero(36)};// actionTransformationVector;
 }
 
 bool LeggedRobotMpcnetDefinition::isValid(scalar_t t, const vector_t& x, const ModeSchedule& modeSchedule,
