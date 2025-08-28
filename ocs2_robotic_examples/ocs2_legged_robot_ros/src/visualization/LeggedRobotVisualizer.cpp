@@ -77,10 +77,10 @@ void LeggedRobotVisualizer::launchVisualizerNode(ros::NodeHandle& nodeHandle) {
   costDesiredFeetPositionPublishers_.resize(centroidalModelInfo_.numThreeDofContacts);
   costDesiredFeetPositionPublishers_[0] = nodeHandle.advertise<visualization_msgs::Marker>("/legged_robot/desiredFeetTrajectory/LF", 1);
   costDesiredFeetPositionPublishers_[1] = nodeHandle.advertise<visualization_msgs::Marker>("/legged_robot/desiredFeetTrajectory/RF", 1);
-  costDesiredFeetPositionPublishers_[0] = nodeHandle.advertise<visualization_msgs::Marker>("/legged_robot/desiredFeetTrajectory/LM", 1);
-  costDesiredFeetPositionPublishers_[1] = nodeHandle.advertise<visualization_msgs::Marker>("/legged_robot/desiredFeetTrajectory/RM", 1);
-  costDesiredFeetPositionPublishers_[2] = nodeHandle.advertise<visualization_msgs::Marker>("/legged_robot/desiredFeetTrajectory/LH", 1);
-  costDesiredFeetPositionPublishers_[3] = nodeHandle.advertise<visualization_msgs::Marker>("/legged_robot/desiredFeetTrajectory/RH", 1);
+  costDesiredFeetPositionPublishers_[2] = nodeHandle.advertise<visualization_msgs::Marker>("/legged_robot/desiredFeetTrajectory/LM", 1);
+  costDesiredFeetPositionPublishers_[3] = nodeHandle.advertise<visualization_msgs::Marker>("/legged_robot/desiredFeetTrajectory/RM", 1);
+  costDesiredFeetPositionPublishers_[4] = nodeHandle.advertise<visualization_msgs::Marker>("/legged_robot/desiredFeetTrajectory/LH", 1);
+  costDesiredFeetPositionPublishers_[5] = nodeHandle.advertise<visualization_msgs::Marker>("/legged_robot/desiredFeetTrajectory/RH", 1);
   stateOptimizedPublisher_ = nodeHandle.advertise<visualization_msgs::MarkerArray>("/legged_robot/optimizedStateTrajectory", 1);
   currentStatePublisher_ = nodeHandle.advertise<visualization_msgs::MarkerArray>("/legged_robot/currentState", 1);
 
